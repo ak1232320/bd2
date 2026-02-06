@@ -1,0 +1,39 @@
+<!-- index.html — Event Logger MVP for GitHub Pages -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Logger</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; margin-bottom: 1rem; }
+    label { display: block; font-size: 0.85rem; margin-bottom: 0.25rem; }
+    input { width: 100%; padding: 0.5rem; font-size: 0.9rem; border: 1px solid #ccc; border-radius: 4px; }
+    .row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    button { padding: 0.5rem 1rem; font-size: 0.9rem; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+    #saveUrl { background: #555; }
+    #ctaA { background: #2563eb; }
+    #ctaB { background: #7c3aed; }
+    #heartbeat { background: #059669; }
+    button:active { opacity: 0.8; }
+    #status { margin-top: 1rem; padding: 0.5rem; font-size: 0.85rem; min-height: 2rem; border-radius: 4px; background: #f3f4f6; }
+  </style>
+</head>
+<body>
+  <h1>Event Logger</h1>
+  <label for="gasUrl">Google Apps Script Web App URL</label>
+  <input id="gasUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec">
+  <div class="row">
+    <button id="saveUrl">Save URL</button>
+  </div>
+  <div class="row">
+    <button id="ctaA">CTA A</button>
+    <button id="ctaB">CTA B</button>
+    <button id="heartbeat">Heartbeat</button>
+  </div>
+  <div id="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
