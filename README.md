@@ -61,3 +61,68 @@
 - Google Apps Script имеет лимиты: ~20 000 запросов в день для бесплатных аккаунтов.
 - `crypto.randomUUID()` требует HTTPS или localhost.
 - При изменении кода в Apps Script нужно создавать **новое** развертывание и обновлять URL.
+
+---
+
+# Sentiment Analyzer
+
+Клиентское веб-приложение для анализа тональности текстовых отзывов. Работает полностью в браузере, без сервера.
+
+## Структура
+
+| Файл | Назначение |
+|------|-----------|
+| `sentiment/index.html` | UI: переключатель режимов, кнопка анализа, результат |
+| `sentiment/app.js` | Логика: загрузка отзывов, инференс, API-вызовы |
+| `sentiment/reviews_test.tsv` | Тестовые отзывы (TSV, колонка `text`) |
+
+## Два режима работы
+
+### Local Model (Transformers.js)
+- Модель `Xenova/distilbert-base-uncased-finetuned-sst-2-english` (~67 МБ) загружается и работает в браузере
+- Первая загрузка: 30-60 секунд, далее кешируется браузером
+- API-ключ не нужен
+- Возвращает POSITIVE / NEGATIVE с точным confidence score
+
+### OpenRouter API
+- Использует модель `google/gemini-3-flash-preview` через OpenRouter
+- Требует API-ключ (получить на [openrouter.ai](https://openrouter.ai))
+- Ключ хранится в `localStorage` под ключом `openrouter_key`
+- Быстрый ответ, не нужно скачивать модель
+- Возвращает POSITIVE / NEGATIVE / NEUTRAL с confidence score
+
+## Быстрый старт
+
+1. Запустите локальный HTTP-сервер (ES-модули не работают через `file://`):
+   ```bash
+   cd c:\Users\Alex\InternalD\nndl2
+   python -m http.server 8000
+   ```
+2. Откройте `http://localhost:8000/sentiment/index.html`
+3. **Local Model**: подождите загрузки модели, нажмите "Analyze Random Review"
+4. **OpenRouter API**: переключите радио-кнопку, вставьте API-ключ, нажмите Save Key, затем Analyze
+
+## Формат отзывов (reviews_test.tsv)
+
+TSV-файл с заголовком `text`. Каждая строка — один отзыв. Пример:
+
+```
+text
+This product exceeded all my expectations.
+Terrible experience. The item broke after two days.
+```
+
+## Используемые CDN
+
+| Библиотека | Версия | Назначение |
+|-----------|--------|-----------|
+| [Transformers.js](https://huggingface.co/docs/transformers.js) | 3.7.6 | ML-инференс в браузере |
+| [Papa Parse](https://www.papaparse.com) | 5.4.1 | Парсинг TSV |
+| [Font Awesome](https://fontawesome.com) | 6.4.0 | Иконки результатов |
+
+## Ограничения
+
+- ES-модули требуют HTTP-сервер (не работает через `file://`)
+- Первая загрузка локальной модели медленная (~67 МБ)
+- OpenRouter API-ключ хранится в localStorage (не подходит для продакшена с чужими пользователями)
+- Модель DistilBERT выдаёт только POSITIVE/NEGATIVE (без NEUTRAL); NEUTRAL возможен только через API
