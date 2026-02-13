@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sentiment Analyzer</title>
+  <title>Sentiment Analyzer — Clean Light</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,45 +11,47 @@
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       max-width: 650px; margin: 0 auto; padding: 2rem 1.5rem;
-      background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #06b6d4 100%);
-      min-height: 100vh; color: #f8fafc;
+      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh; color: #1e293b;
     }
 
     h1 {
       font-size: 2rem; margin-bottom: 1.5rem; text-align: center;
       font-weight: 700; letter-spacing: -0.02em;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      color: #0f172a;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+      background: #ffffff;
       border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+      border: 1px solid #e2e8f0;
       color: #1e293b;
     }
 
     #status-area {
-      background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
       padding: 1rem; border-radius: 10px;
-      text-align: center; font-size: 0.95rem; color: #fff;
+      text-align: center; font-size: 0.95rem; color: #475569;
       font-weight: 500; margin-bottom: 1.25rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
     #review-display {
-      background: rgba(255,255,255,0.08); backdrop-filter: blur(5px);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
       padding: 1.5rem; border-radius: 10px;
       min-height: 5rem; font-style: italic; line-height: 1.7;
-      margin-bottom: 1.25rem; color: #f1f5f9;
+      margin-bottom: 1.25rem; color: #334155;
       font-size: 1.05rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
     #result-area {
       text-align: center; padding: 2rem 1.5rem; border-radius: 12px;
       margin-bottom: 1.25rem; font-size: 1.2rem; display: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       animation: slideIn 0.3s ease-out;
     }
     @keyframes slideIn {
@@ -58,55 +60,55 @@
     }
     #result-area.positive {
       display: block;
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      color: #fff;
+      background: #f0fdf4; border: 2px solid #86efac;
+      color: #166534;
     }
     #result-area.negative {
       display: block;
-      background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-      color: #fff;
+      background: #fef2f2; border: 2px solid #fca5a5;
+      color: #991b1b;
     }
     #result-area.neutral {
       display: block;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: #fff;
+      background: #fefce8; border: 2px solid #fde68a;
+      color: #854d0e;
     }
     #result-area.loading {
       display: block;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
+      background: #f1f5f9; border: 2px solid #cbd5e1;
+      color: #475569;
     }
 
     .result-icon { font-size: 3rem; margin-bottom: 0.75rem; }
     .confidence {
-      font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;
+      font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;
       font-weight: 500;
     }
 
     #action-result {
       display: none; text-align: center; padding: 1.5rem;
       border-radius: 12px; margin-bottom: 1.25rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       animation: slideIn 0.3s ease-out 0.15s both;
     }
     #action-result.action-coupon {
       display: block;
-      background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff;
+      background: #fef2f2; border: 2px solid #fca5a5; color: #991b1b;
     }
     #action-result.action-feedback {
       display: block;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff;
+      background: #eff6ff; border: 2px solid #93c5fd; color: #1e40af;
     }
     #action-result.action-referral {
       display: block;
-      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: #fff;
+      background: #faf5ff; border: 2px solid #d8b4fe; color: #6b21a8;
     }
 
     #error-area {
       display: none; padding: 1rem;
-      background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-      color: #fff; border-radius: 10px; font-size: 0.9rem;
-      margin-bottom: 1.25rem; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+      background: #fef2f2; border: 2px solid #fca5a5;
+      color: #991b1b; border-radius: 10px; font-size: 0.9rem;
+      margin-bottom: 1.25rem;
     }
 
     .mode-toggle {
@@ -115,14 +117,15 @@
     }
     .mode-toggle label {
       cursor: pointer; padding: 0.5rem 1.25rem;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
       border-radius: 8px; font-size: 0.9rem;
-      transition: all 0.2s; color: #fff;
+      transition: all 0.2s; color: #64748b;
     }
     .mode-toggle label:has(input:checked) {
-      background: rgba(255,255,255,0.25);
-      border-color: rgba(255,255,255,0.4);
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #fff;
       font-weight: 600;
     }
     .mode-toggle input { display: none; }
@@ -133,13 +136,13 @@
     .btn {
       padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600;
       border: none; border-radius: 8px; cursor: pointer;
-      transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+      transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      background: #0f172a;
       color: #fff;
     }
     .btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
     }
     #saveKey { margin-top: 0.75rem; }
     #saveGasUrl { margin-top: 0; }
@@ -154,19 +157,19 @@
       width: 100%; padding: 0.75rem; font-size: 0.9rem;
       border: 2px solid #e2e8f0; border-radius: 8px;
       background: #f8fafc; transition: all 0.2s;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.75rem; color: #1e293b;
     }
     .card input[type="url"]:focus,
     .card input[type="password"]:focus {
-      outline: none; border-color: #06b6d4;
-      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+      outline: none; border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
     }
 
     #analyzeBtn {
       display: block; width: 100%; padding: 1rem; font-size: 1.1rem;
-      background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #fff; border: none; border-radius: 12px; cursor: pointer;
-      font-weight: 700; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+      font-weight: 700; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
       transition: all 0.3s;
     }
     #analyzeBtn:disabled {
@@ -175,7 +178,14 @@
     }
     #analyzeBtn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(245, 158, 11, 0.5);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Action buttons need dark text for light backgrounds */
+    #action-result button {
+      color: inherit !important;
+      border-color: currentColor !important;
+      background: rgba(0,0,0,0.05) !important;
     }
   </style>
 </head>

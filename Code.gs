@@ -11,7 +11,7 @@ function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName('logs') || ss.insertSheet('logs');
   if (sh.getLastRow() === 0) {
-    sh.appendRow(['ts_iso', 'event', 'variant', 'userId', 'meta']);
+    sh.appendRow(['ts_iso', 'event', 'variant', 'userId', 'meta', 'action_taken']);
   }
   var ts = p.ts ? new Date(Number(p.ts)) : new Date();
   sh.appendRow([
@@ -19,7 +19,8 @@ function doPost(e) {
     p.event || '',
     p.variant || '',
     p.userId || '',
-    p.meta || ''
+    p.meta || '',
+    p.action_taken || ''
   ]);
   return ContentService.createTextOutput('OK');
 }
